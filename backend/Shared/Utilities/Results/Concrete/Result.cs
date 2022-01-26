@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Utilities.Results.Concrete
 {
-    internal class Result : IResult
+    public class Result : IResult
     {
         public Result(ResultStatus resultStatus)
         {
