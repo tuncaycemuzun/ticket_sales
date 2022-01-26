@@ -15,6 +15,7 @@ namespace Services
         {
             CreateMap<UserDto, User>().ReverseMap();
             CreateMap<CreateUserDto, User>().ReverseMap();
+            CreateMap<LoginDto, User>().ReverseMap();
         }
     }
 }
