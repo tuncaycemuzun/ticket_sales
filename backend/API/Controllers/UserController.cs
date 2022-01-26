@@ -20,6 +20,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Route("register")]
         public async Task<JsonResult> Add(CreateUserDto createUserDto)
         {
             var result = await _userService.AddAsync(createUserDto);
@@ -33,5 +34,15 @@ namespace API.Controllers
             var result = await _userService.CreateToken(loginDto);
             return Json(result);
         }
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<JsonResult> RefreshToken([FromBody]RefreshToken refreshToken)
+        {
+            var result = await _userService.CreateTokenByRefreshToken(refreshToken.Token);
+            return Json(result);
+        }
+
+
     }
 }
