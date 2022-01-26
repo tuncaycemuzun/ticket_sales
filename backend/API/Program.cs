@@ -1,14 +1,17 @@
 using Data.Extensions;
+using Services.Extensions;
+using Shared.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services to the container
+builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMongoDbSettings(builder.Configuration);
+builder.Services.DataLayerServiceCollection(builder.Configuration);
+builder.Services.ServiceLayerServiceCollection();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
