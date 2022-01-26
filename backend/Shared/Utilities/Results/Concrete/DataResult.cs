@@ -15,6 +15,11 @@ namespace Shared.Utilities.Results.Concrete
             ResultCode = resultCode;
             Data = data;
         }
+        public DataResult(ResultCode resultCode, string message)
+        {
+            ResultCode = resultCode;
+            Message = message;
+        }
         public DataResult(ResultCode resultCode, string message, T data)
         {
             ResultCode = resultCode;

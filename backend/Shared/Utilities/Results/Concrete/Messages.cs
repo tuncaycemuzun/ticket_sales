@@ -22,6 +22,10 @@ namespace Shared.Utilities.Results.Concrete
             {
                 return "Giriş İşlemi Başarılı";
             }
+            public static string InvalidRefreshToken()
+            {
+                return "Refresh Token Geçerli Değil";
+            }
         }
     }
 }
