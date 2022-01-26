@@ -9,7 +9,7 @@ namespace Shared.Utilities.Results.Abstract
 {
     public interface IResult
     {
-        public ResultStatus ResultStatus { get;}
+        public ResultCode ResultCode { get;}
         public string Message { get; }
         public Exception Exception { get; }
     }

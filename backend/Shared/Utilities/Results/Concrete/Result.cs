@@ -10,22 +10,22 @@ namespace Shared.Utilities.Results.Concrete
 {
     public class Result : IResult
     {
-        public Result(ResultStatus resultStatus)
+        public Result(ResultCode resultCode)
         {
-            ResultStatus = resultStatus;
+            ResultCode = resultCode;
         }
-        public Result(ResultStatus resultStatus, string message)
+        public Result(ResultCode resultCode, string message)
         {
-            ResultStatus = resultStatus;
+            ResultCode = resultCode;
             Message = message;
         }
-        public Result(ResultStatus resultStatus, string message, Exception e)
+        public Result(ResultCode resultCode, string message, Exception e)
         {
             Exception = e;
-            ResultStatus = resultStatus;
+            ResultCode = resultCode;
             Message = message;
         }
-        public ResultStatus ResultStatus { get; }
+        public ResultCode ResultCode { get; }
         public string Message { get; }
         public Exception Exception { get; }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Utilities.Results.ComplexTypes
 {
-    public enum ResultStatus
+    public enum ResultCode
     {
         Success = 0,
         Error = 1,
