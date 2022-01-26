@@ -13,7 +13,7 @@ namespace Data.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddMongoDbSettings(this IServiceCollection services,
+        public static IServiceCollection DataLayerServiceCollection(this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddSingleton<IUserDal, UserDal>();
