@@ -48,14 +48,13 @@ namespace Services.Concrete
                 UserName = user.FirstName
             });
         }
-
         public async Task<IDataResult<TokenDto>> CreateToken(LoginDto loginDto)
         {
             MD5 md5Hash = MD5.Create();
             var hashPass = Tools.GetMd5Hash(md5Hash, loginDto.Password);
             var user = await _user.GetAsync(x => x.Email == loginDto.Email && x.Password == hashPass);
             //var userId = await 
-            if (user == null) return new DataResult<TokenDto>(ResultCode.Error, Messages.User.LoginError(), new TokenDto());
+            if (user == null) return new DataResult<TokenDto>(ResultCode.Error, Messages.User.LoginError());
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
             var tokenDescriptor = new SecurityTokenDescriptor()
@@ -72,14 +71,14 @@ namespace Services.Concrete
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var hasToken = await _token.DeleteAsync(x => x.UserId == user.Id.ToString());
+            var hasToken = await _token.DeleteAsync(x => x.UserId == user.Id);
             await _token.AddAsync(new UserToken
             {
                 AccessToken = tokenHandler.WriteToken(token),
                 AccessTokenExpiration = (DateTime)tokenDescriptor.Expires,
                 RefreshToken = GetRefreshToken(),
                 RefreshTokenExpiration = DateTime.UtcNow.AddDays(1),
-                UserId = user.Id.ToString()
+                UserId = user.Id
             });
             return new DataResult<TokenDto>(ResultCode.Success, Messages.User.LoginSuccess(), new TokenDto
             {
@@ -89,14 +88,46 @@ namespace Services.Concrete
                 RefreshTokenExpiration = DateTime.UtcNow.AddDays(1)
             });
         }
-
-        
         public async Task<IDataResult<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
         {
             var tokenEntity = await _token.GetAsync(x=>x.RefreshToken==refreshToken);
+            if (tokenEntity == null) return new DataResult<TokenDto>(ResultCode.Error, Messages.User.InvalidRefreshToken());
+            var user = await _user.GetAsync(x => x.Id == tokenEntity.UserId);
 
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenKey = Encoding.ASCII.GetBytes(_key);
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                    new Claim(ClaimTypes.Role,user.Roles[0]),
+                    new Claim(ClaimTypes.Email,user.Email),
+                }),
+                Expires = DateTime.UtcNow.AddHours(5),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            tokenEntity.AccessToken = tokenHandler.WriteToken(token); 
+            tokenEntity.AccessTokenExpiration = (DateTime)tokenDescriptor.Expires;
+            tokenEntity.RefreshToken = GetRefreshToken();
+            tokenEntity.RefreshTokenExpiration = DateTime.UtcNow.AddDays(1);
+            await _token.UpdateAsync(tokenEntity,x=>x.UserId==user.Id);
+            tokenEntity = await _token.GetAsync(x => x.RefreshToken == tokenEntity.RefreshToken);
+            return new DataResult<TokenDto>(ResultCode.Success, Messages.User.LoginSuccess(), new TokenDto
+            {
+                AccessToken = tokenEntity.AccessToken,
+                AccessTokenExpiration = tokenEntity.AccessTokenExpiration,
+                RefreshToken = tokenEntity.RefreshToken,
+                RefreshTokenExpiration = tokenEntity.RefreshTokenExpiration
+            });
         }
-
+        public async Task<Result> RevokeToken(UserToken token)
+        {
+            await _token.DeleteAsync(token);
+            return new Result(ResultCode.Success);
+        }
         private string GetRefreshToken()
         {
             var key = new Byte[32];
