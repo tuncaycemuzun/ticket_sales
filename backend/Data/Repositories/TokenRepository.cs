@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class UserDal : MongoDbRepositoryBase<User>,IUserDal
+    public class TokenRepository : MongoDbRepositoryBase<UserToken>, ITokenRepository
     {
-        public UserDal(IOptions<MongoDbSettings> options) : base(options)
+        public TokenRepository(IOptions<MongoDbSettings> options) : base(options)
         {
         }
     }

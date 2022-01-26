@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Abstract
 {
-    public interface IUserDal : IRepository<User,string>
+    public interface ITokenRepository : IRepository<UserToken>
     {
     }
 }
