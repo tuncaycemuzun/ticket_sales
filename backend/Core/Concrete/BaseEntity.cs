@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Core.Concrete
 {
-    public class BaseEntity : IEntity<string>
+    public class BaseEntity : IEntity
     {
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonId]
         [BsonElement(Order = 0)]
-        public string Id { get; } = ObjectId.GenerateNewId().ToString();
+        public ObjectId Id { get; set; } 
 
         [BsonRepresentation(BsonType.DateTime)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
