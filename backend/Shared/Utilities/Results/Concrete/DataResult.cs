@@ -10,26 +10,26 @@ namespace Shared.Utilities.Results.Concrete
 {
     public class DataResult<T> : IDataResult<T>
     {
-        public DataResult(ResultCode resultStatus, T data)
+        public DataResult(ResultCode resultCode, T data)
         {
-            ResultStatus = resultStatus;
+            ResultCode = resultCode;
             Data = data;
         }
-        public DataResult(ResultCode resultStatus, string message, T data)
+        public DataResult(ResultCode resultCode, string message, T data)
         {
-            ResultStatus = resultStatus;
+            ResultCode = resultCode;
             Message = message;
             Data = data;
         }
-        public DataResult(ResultCode resultStatus, string message, Exception e, T data)
+        public DataResult(ResultCode resultCode, string message, Exception e, T data)
         {
-            ResultStatus = resultStatus;
+            ResultCode = resultCode;
             Message = message;
             Exception = e;
             Data = data;
         }
 
-        public ResultCode ResultStatus { get; }
+        public ResultCode ResultCode { get; }
         public string Message { get; }
         public Exception Exception { get; }
         public T Data { get; }
