@@ -25,5 +25,13 @@ namespace API.Controllers
             var result = await _userService.AddAsync(createUserDto);
             return Json(result);
         }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<JsonResult> Login(LoginDto loginDto)
+        {
+            var result = await _userService.CreateToken(loginDto);
+            return Json(result);
+        }
     }
 }
