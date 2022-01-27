@@ -25,7 +25,12 @@
       "ProjectGuid": "cb4529ca-085c-4ac8-aca3-ab196a99e060",
       "DisplayName": "API",
       "ColorIndex": 3
+    },
+    "dc38e79d-c07e-40fc-bbf6-4521db1bec76": {
+      "ProjectGuid": "dc38e79d-c07e-40fc-bbf6-4521db1bec76",
+      "DisplayName": "Shared",
+      "ColorIndex": 4
     }
   },
-  "NextColorIndex": 4
+  "NextColorIndex": 5
 }

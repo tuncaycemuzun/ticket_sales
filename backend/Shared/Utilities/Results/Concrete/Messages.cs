@@ -8,6 +8,10 @@ namespace Shared.Utilities.Results.Concrete
 {
     public static class Messages
     {
+        public static string Error()
+        {
+            return "Bir Hata İle Karşılaşıldı";
+        }
         public static class User
         {
             public static string SuccessCreate()
@@ -25,6 +29,10 @@ namespace Shared.Utilities.Results.Concrete
             public static string InvalidRefreshToken()
             {
                 return "Refresh Token Geçerli Değil";
+            }
+            public static string NonUser()
+            {
+                return "Kullanıcı Bulunamadı";
             }
         }
     }
