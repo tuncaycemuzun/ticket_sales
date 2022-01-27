@@ -2,6 +2,7 @@
 using Core.Concrete;
 using Core.Dtos;
 using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Shared.Utilities.Results.ComplexTypes;
@@ -27,20 +28,24 @@ namespace API.Controllers
             return Json(result);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public async Task<JsonResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
+
             var result = await _userService.CreateToken(loginDto);
-            return Json(result);
+            if (result == null)
+                return Unauthorized();
+
+            return Ok(result);
         }
 
-        [HttpPost]
-        [Route("refresh")]
-        public async Task<JsonResult> RefreshToken([FromBody]RefreshToken refreshToken)
+        [Authorize]
+        [HttpGet("deneme")]
+        public IActionResult Add()
         {
-            var result = await _userService.CreateTokenByRefreshToken(refreshToken.Token);
-            return Json(result);
+            return Ok();
         }
 
 
