@@ -8,10 +8,10 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class AuthController : Controller
     {
-        private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IAuthService _userService;
+        public AuthController(IAuthService userService)
         {
             _userService = userService;
         }
@@ -29,7 +29,7 @@ namespace API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            
+
             if (ModelState.IsValid)
             {
                 var result = await _userService.CreateToken(loginDto);
@@ -42,12 +42,12 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("deneme")]
-        public IActionResult Add()
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> LogOut(OnlyTokenDto onlyTokenDto)
         {
-            return Ok();
+            var result = await _userService.RevokeToken(onlyTokenDto);
+            return Ok(result);
         }
-
-
     }
 }
