@@ -2,23 +2,17 @@
 using Core.Concrete;
 using Core.Dtos;
 using Core.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Services.Extensions;
 using Services.Helpers;
 using Shared.Utilities.Results.Abstract;
 using Shared.Utilities.Results.ComplexTypes;
 using Shared.Utilities.Results.Concrete;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Concrete
 {
@@ -43,21 +37,21 @@ namespace Services.Concrete
             string hash = Tools.GetMd5Hash(md5Hash, user.Password);
             user.Password = hash;
             await _user.AddAsync(user);
-            return new DataResult<UserDto>(ResultCode.Error, Messages.User.SuccessCreate(), new UserDto
+            return new DataResult<UserDto>(ResultCode.Success, Messages.User.SuccessCreate(), new UserDto
             {
                 Email = user.Email,
                 Id = user.Id.ToString(),
                 UserName = user.FirstName
             });
         }
-        public async Task<UserToken> CreateToken(LoginDto loginDto)
+        public async Task<IDataResult<TokenDto>> CreateToken(LoginDto loginDto)
         {
-            UserToken userToken = new UserToken();
+           
             MD5 md5Hash = MD5.Create();
             var hashPass = Tools.GetMd5Hash(md5Hash, loginDto.Password);
             var user = await _user.GetAsync(x => x.Email == loginDto.Email && x.Password == hashPass);
             //var userId = await 
-            if (user == null) return userToken;
+            if (user == null) return new DataResult<TokenDto>(ResultCode.NoContent, Messages.User.LoginError());
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_jwtSetting.IssuerSigningKey);
             var tokenDescriptor = new SecurityTokenDescriptor()
@@ -75,19 +69,21 @@ namespace Services.Concrete
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             var hasToken = await _token.DeleteAsync(x => x.UserId == user.Id);
+            UserToken userToken = new UserToken();
             userToken.AccessToken = tokenHandler.WriteToken(token);
             userToken.AccessTokenExpiration = (DateTime)tokenDescriptor.Expires;
             userToken.RefreshToken = GetRefreshToken();
             userToken.RefreshTokenExpiration = DateTime.UtcNow.AddDays(1);
             userToken.UserId = user.Id;
             await _token.AddAsync(userToken);
-            return userToken;
+            var tokenDto = ObjectMapper.Mapper.Map<TokenDto>(userToken);
+            return new DataResult<TokenDto>(ResultCode.Success, Messages.User.LoginSuccess(), tokenDto);
 
         }
         public async Task<IDataResult<TokenDto>> CreateTokenByRefreshToken(string refreshToken)
         {
             var tokenEntity = await _token.GetAsync(x => x.RefreshToken == refreshToken);
-            if (tokenEntity == null) return new DataResult<TokenDto>(ResultCode.Error, Messages.User.InvalidRefreshToken());
+            if (tokenEntity == null) return new DataResult<TokenDto>(ResultCode.NoContent, Messages.User.InvalidRefreshToken());
             var user = await _user.GetAsync(x => x.Id == tokenEntity.UserId);
 
             var tokenHandler = new JwtSecurityTokenHandler();

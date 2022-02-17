@@ -1,11 +1,7 @@
-﻿using Core.Abstract;
-using Core.Concrete;
-using Core.Dtos;
+﻿using Core.Dtos;
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services;
-using Shared.Utilities.Results.ComplexTypes;
 using Shared.Utilities.Results.Concrete;
 
 namespace API.Controllers
@@ -33,12 +29,16 @@ namespace API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-
-            var result = await _userService.CreateToken(loginDto);
-            if (result == null)
-                return Unauthorized();
-
-            return Ok(result);
+            
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.CreateToken(loginDto);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return BadRequest(Messages.User.NonUser());
+            }
+            return BadRequest(loginDto);
         }
 
         [Authorize]
