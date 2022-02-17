@@ -1,5 +1,5 @@
 import Layout from "../components/Layouts/layout";
-import {ImSearch,ImLocation} from 'react-icons/Im'
+import {ImSearch,ImLocation} from 'react-icons/im'
 export default function Home() {
   return (
     <Layout>
