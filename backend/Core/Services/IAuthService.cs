@@ -5,11 +5,11 @@ using Shared.Utilities.Results.Concrete;
 
 namespace Core.Services
 {
-    public interface IUserService
+    public interface IAuthService
     {
         Task<IDataResult<UserDto>> AddAsync(CreateUserDto createUserDto);
         Task<IDataResult<TokenDto>> CreateToken(LoginDto loginDto);
         Task<IDataResult<TokenDto>> CreateTokenByRefreshToken(string refreshToken);
-        Task<Result> RevokeToken(UserToken token);
+        Task<Result> RevokeToken(OnlyTokenDto onlyTokenDto);
     }
 }

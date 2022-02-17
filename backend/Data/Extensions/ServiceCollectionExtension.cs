@@ -11,7 +11,7 @@ namespace Data.Extensions
         public static IServiceCollection DataLayerServiceCollection(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IAuthRepository, UserRepository>();
             services.AddSingleton<ITokenRepository, TokenRepository>();
 
             return services.Configure<MongoDbSettings>(options =>

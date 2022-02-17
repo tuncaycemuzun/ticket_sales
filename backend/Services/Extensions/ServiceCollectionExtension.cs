@@ -8,7 +8,7 @@ namespace Services.Extensions
     {
         public static IServiceCollection ServiceLayerServiceCollection(this IServiceCollection services)
         {
-            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IAuthService, AuthService>();
             return services;
         }
     }

@@ -17,13 +17,13 @@ using System.Text;
 namespace Services.Concrete
 {
 
-    public class UserService : IUserService
+    public class AuthService : IAuthService
     {
 
-        private readonly IUserRepository _user;
+        private readonly IAuthRepository _user;
         private readonly ITokenRepository _token;
         private readonly JwtSettings _jwtSetting;
-        public UserService(IUserRepository user, IConfiguration configuration, ITokenRepository token, JwtSettings jwtSetting)
+        public AuthService(IAuthRepository user, IConfiguration configuration, ITokenRepository token, JwtSettings jwtSetting)
         {
             _user = user;
             _token = token;
@@ -115,9 +115,11 @@ namespace Services.Concrete
                 RefreshTokenExpiration = tokenEntity.RefreshTokenExpiration
             });
         }
-        public async Task<Result> RevokeToken(UserToken token)
+        public async Task<Result> RevokeToken(OnlyTokenDto onlyTokenDto)
         {
-            await _token.DeleteAsync(token);
+            var result = await _token.GetAsync(x=>x.AccessToken==onlyTokenDto.Token);
+            if (result == null) return new Result(ResultCode.NotFound,Messages.Token.NotFound());
+            await _token.DeleteAsync(result);
             return new Result(ResultCode.Success);
         }
         public string GetRefreshToken()

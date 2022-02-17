@@ -6,6 +6,14 @@
         {
             return "Bir Hata İle Karşılaşıldı";
         }
+
+        public static class Token
+        {
+            public static string NotFound()
+            {
+                return "token Bulunmadı";
+            }
+        }
         public static class User
         {
             public static string SuccessCreate()
