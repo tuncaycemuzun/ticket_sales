@@ -2,6 +2,7 @@
 using Core.Concrete;
 using Data.Settings;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 
@@ -34,7 +35,7 @@ namespace Data.Repositories
 
         public virtual Task<T> GetByIdAsync(string id)
         {
-            return Collection.Find(x => x.Id.ToString() == id).FirstOrDefaultAsync();
+            return Collection.Find(x => x.Id == new ObjectId(id)).FirstOrDefaultAsync();
         }
 
         public virtual async Task<T> AddAsync(T entity)
