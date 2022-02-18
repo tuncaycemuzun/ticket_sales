@@ -13,6 +13,8 @@ namespace Data.Extensions
         {
             services.AddSingleton<IAuthRepository, UserRepository>();
             services.AddSingleton<ITokenRepository, TokenRepository>();
+            services.AddSingleton<ITicketRepository, TicketRepository>();
+            services.AddSingleton<ITicketTypeRepository, TicketTypeRepository>();
 
             return services.Configure<MongoDbSettings>(options =>
             {
