@@ -2,6 +2,7 @@
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Utilities.Filter;
 using Shared.Utilities.Results.ComplexTypes;
 
 namespace API.Controllers
@@ -45,5 +46,15 @@ namespace API.Controllers
                 return Ok(result);
             return BadRequest();
         }
+
+        [HttpGet]
+        public IActionResult Select(PaginationFilter filter)
+        {
+            var result = _ticketTypeService.Select(x=>x.IsDeleted==false, filter);
+            if (result.ResultCode == ResultCode.Success)
+                return Ok(result);
+            return BadRequest();
+        }
+
     }
 }
