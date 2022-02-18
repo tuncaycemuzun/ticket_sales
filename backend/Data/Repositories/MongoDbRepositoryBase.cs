@@ -75,5 +75,6 @@ namespace Data.Repositories
         {
             return await Collection.FindOneAndDeleteAsync(filter);
         }
+
     }
 }
