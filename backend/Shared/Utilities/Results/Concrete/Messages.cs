@@ -37,5 +37,22 @@
                 return "Kullanıcı Bulunamadı";
             }
         }
+
+
+        public static class Ticket
+        {
+            public static string BadGateway()
+            {
+                return "Bir Hata Oluştu";
+            }
+            public static string NotFound()
+            {
+                return "Bilet Bulunamadı";
+            }
+            public static string Success()
+            {
+                return "Bilet Başarıyla Silindi";
+            }
+        }
     }
 }
