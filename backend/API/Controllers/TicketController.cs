@@ -25,7 +25,7 @@ namespace API.Controllers
             var result = await _ticketService.AddAsync(ticketAddDto);
             if(result.ResultCode == ResultCode.Success)
                 return Ok(result);
-            return BadRequest(result);
+            return BadRequest();
         }
 
 
@@ -36,7 +36,7 @@ namespace API.Controllers
             var result = await _ticketService.DeleteAsync(id);
             if (result.ResultCode == ResultCode.Success)
                 return Ok(result);
-            return BadRequest(result);
+            return BadRequest();
         }
 
 
@@ -47,7 +47,7 @@ namespace API.Controllers
             var result = await _ticketService.UpdateAsync(id,ticketUpdateDto);
             if (result.ResultCode == ResultCode.Success)
                 return Ok(result);
-            return BadRequest(result);
+            return BadRequest();
         }
     }
 }

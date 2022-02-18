@@ -2,11 +2,13 @@
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Utilities.Results.ComplexTypes;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class TicketTypeController : Controller
     {
         private readonly ITicketTypeService _ticketTypeService;
@@ -16,29 +18,32 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Add(TicketTypeAddDto ticketTypeAddDto)
         {
             var result = await _ticketTypeService.AddAsync(ticketTypeAddDto);
-            return Ok(result);
+            if (result.ResultCode == ResultCode.Success)
+                return Ok(result);
+            return BadRequest();
         }
 
 
         [HttpDelete]
-        [Authorize]
         public async Task<IActionResult> Delete(TicketTypeDeleteDto ticketTypeDeleteDto)
         {
             var result = await _ticketTypeService.DeleteAsync(ticketTypeDeleteDto.Id);
-            return Ok(result);
+            if (result.ResultCode == ResultCode.Success)
+                return Ok(result);
+            return BadRequest();
         }
 
 
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> Update(string id,TicketTypeUpdateDto ticketTypeUpdateDto)
+        public async Task<IActionResult> Update(string id, TicketTypeUpdateDto ticketTypeUpdateDto)
         {
-            var result = await _ticketTypeService.UpdateAsync(id,ticketTypeUpdateDto);
-            return Ok(result);
+            var result = await _ticketTypeService.UpdateAsync(id, ticketTypeUpdateDto);
+            if (result.ResultCode == ResultCode.Success)
+                return Ok(result);
+            return BadRequest();
         }
     }
 }
