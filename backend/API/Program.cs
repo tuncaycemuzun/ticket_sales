@@ -32,9 +32,9 @@ builder.Services.AddAuthentication(options => {
     {
         ValidateIssuerSigningKey = bindJwtSettings.ValidateIssuerSigningKey,
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey)),
-        ValidateIssuer =false,
+        ValidateIssuer = true,
         ValidIssuer = bindJwtSettings.ValidIssuer,
-        ValidateAudience = false,
+        ValidateAudience = true,
         ValidAudience = bindJwtSettings.ValidAudience,
         RequireExpirationTime = bindJwtSettings.RequireExpirationTime,
         ValidateLifetime = bindJwtSettings.RequireExpirationTime,
