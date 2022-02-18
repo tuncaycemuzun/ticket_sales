@@ -63,7 +63,9 @@ namespace Services.Concrete
                     new Claim(ClaimTypes.Email,user.Email),
                 }),
                 Expires = DateTime.UtcNow.AddHours(5),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature),
+                Audience = _jwtSetting.ValidAudience,
+                Issuer = _jwtSetting.ValidIssuer
 
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

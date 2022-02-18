@@ -25,6 +25,7 @@ builder.Services.AddSingleton(bindJwtSettings);
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options => {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
@@ -38,7 +39,7 @@ builder.Services.AddAuthentication(options => {
         ValidAudience = bindJwtSettings.ValidAudience,
         RequireExpirationTime = bindJwtSettings.RequireExpirationTime,
         ValidateLifetime = bindJwtSettings.RequireExpirationTime,
-        ClockSkew = TimeSpan.FromDays(1),
+        ClockSkew = TimeSpan.FromDays(1)
     };
 });
 var app = builder.Build();
