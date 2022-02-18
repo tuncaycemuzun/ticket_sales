@@ -1,9 +1,11 @@
 ﻿using Core.Concrete;
 using Core.Dtos;
+using Shared.Utilities.Filter;
 using Shared.Utilities.Results.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +16,6 @@ namespace Core.Services
         Task<IResult> AddAsync(TicketTypeAddDto ticketTypeAddDto);
         Task<IResult> DeleteAsync(string id);
         Task<IDataResult<TicketTypeUpdateDto>> UpdateAsync(string id,TicketTypeUpdateDto ticketTypeUpdate);
-        Task<IDataResult<IList<TicketType>>> GetAsync();
+        IDataResult<IList<TicketType>> Select(Expression<Func<TicketType, bool>> predicate = null, PaginationFilter filter = null);
     }
 }

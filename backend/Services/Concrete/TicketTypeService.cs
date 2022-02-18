@@ -3,9 +3,11 @@ using Core.Concrete;
 using Core.Dtos;
 using Core.Services;
 using MongoDB.Bson;
+using Shared.Utilities.Filter;
 using Shared.Utilities.Results.Abstract;
 using Shared.Utilities.Results.ComplexTypes;
 using Shared.Utilities.Results.Concrete;
+using System.Linq.Expressions;
 
 namespace Services.Concrete
 {
@@ -31,9 +33,11 @@ namespace Services.Concrete
             return new Result(ResultCode.Success);
         }
 
-        public Task<IDataResult<IList<TicketType>>> GetAsync()
+        public IDataResult<IList<TicketType>> Select(Expression<Func<TicketType, bool>> predicate = null, PaginationFilter filter = null)
         {
-            throw new NotImplementedException();
+            var data = _repo.ListWithParams(predicate, filter);
+            if (data == null) return new DataResult<IList<TicketType>>(ResultCode.NoContent,"Error");
+            return new DataResult<IList<TicketType>>(ResultCode.Success, data.ToList());
         }
 
         public async Task<IDataResult<TicketTypeUpdateDto>> UpdateAsync(string id,TicketTypeUpdateDto ticketTypeUpdate)
